@@ -70,13 +70,37 @@ module.exports = async (req, res) => {
 
     console.log('Calling OpenAI API with messages:', messages.length);
     
-    // Call OpenAI API
-    const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages,
-      temperature: 0.7,
-      max_tokens: 500
-    });
+    // Call OpenAI API with error handling for rate limits
+    let response;
+    try {
+      response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages,
+        temperature: 0.7,
+        max_tokens: 500
+      });
+    } catch (openaiError) {
+      console.error('OpenAI API error:', openaiError);
+      
+      // Check if it's a rate limit error
+      if (openaiError.message.includes('rate limit') || openaiError.status === 429) {
+        return res.status(429).json({
+          error: 'Rate limit exceeded. Please try again later.',
+          message: openaiError.message
+        });
+      }
+      
+      // Check if it's an authentication error
+      if (openaiError.message.includes('authentication') || openaiError.status === 401) {
+        return res.status(401).json({
+          error: 'Authentication error. Please check your API key.',
+          message: openaiError.message
+        });
+      }
+      
+      // Re-throw for general handling
+      throw openaiError;
+    }
 
     console.log('OpenAI API response received');
     
@@ -85,10 +109,17 @@ module.exports = async (req, res) => {
       response: response.choices[0].message.content
     });
   } catch (error) {
-    console.error('Error processing request:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      code: error.code
+    });
+    
     return res.status(500).json({
       error: 'An error occurred while processing your request',
-      message: error.message
+      message: error.message,
+      code: error.code
     });
   }
 }; 
