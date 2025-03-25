@@ -4,7 +4,8 @@
   "description": "AI Health Assistant",
   "main": "index.js",
   "scripts": {
-    "start": "serve public"
+    "start": "serve public",
+    "build": "echo 'No build step needed'"
   },
   "keywords": [
     "health",
