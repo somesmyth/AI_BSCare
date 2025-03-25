@@ -69,7 +69,7 @@ export default async function handler(request) {
     
     // Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0125",
       messages,
       temperature: 0.7,
       max_tokens: 500
