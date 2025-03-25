@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingDiv.appendChild(loadingContent);
       chatMessages.appendChild(loadingDiv);
       
-      // Send request to server
-      const response = await fetch('/api/health-query', {
+      // Use the mock API as the primary solution
+      const response = await fetch('/api/mock-health', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
