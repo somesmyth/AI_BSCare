@@ -3,8 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const sendButton = document.getElementById('send-button');
   
+  // Add disclaimer
+  const disclaimerDiv = document.createElement('div');
+  disclaimerDiv.className = 'disclaimer';
+  disclaimerDiv.textContent = 'BSCare provides general health information, not medical advice. For medical concerns, please consult a healthcare professional.';
+  document.querySelector('.chat-container').insertBefore(disclaimerDiv, chatMessages);
+  
   // Store conversation history
   const conversationHistory = [];
+  
+  // Add welcome message
+  addMessage("Hello! I'm BSCare, your health assistant. How can I help you today?", false);
   
   // Function to add a message to the chat
   function addMessage(content, isUser = false) {
