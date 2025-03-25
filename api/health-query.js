@@ -75,6 +75,10 @@ export default async function handler(request) {
       max_tokens: 500
     });
 
+    // Inside your try block, add this logging
+    console.log('API Key length:', process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length : 0);
+    console.log('API Key first 4 chars:', process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 4) : 'none');
+
     // Return the response
     return new Response(
       JSON.stringify({
